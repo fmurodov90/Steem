@@ -1,14 +1,19 @@
 import React , {Component} from 'react';
-import {View, Text,ActivityIndicator,ScrollView,FlatList} from 'react-native';
+import {View,ActivityIndicator,ScrollView,FlatList} from 'react-native';
 import {Header, Title,Button,Right,Left ,Body} from 'native-base';
 import FontAwesome  from 'react-native-vector-icons/FontAwesome';
 import  * as dsteem  from 'dsteem';
-export  default class WitnessesScreen extends Component{
+import ItemView from './../components/WitnessScreenUI/ItemView';
+import {createStackNavigator} from 'react-navigation';
+import  WebScreen from './WebScreen';
+
+
+class WitnessesScreen extends Component{
     state={
         fetching:false,
         witnessList:[]
     };
-    componentDidMount(){
+    componentWillMount(){
         this.fetchWitnessList()
     }
 
@@ -18,8 +23,8 @@ export  default class WitnessesScreen extends Component{
                 fetching: true
             })
             const client = new dsteem.Client('https://api.steemit.com');
-            const witnesses = await client.database.call('get_witnesses_by_vote', ["", 100]);
-            console.log('Witnesses=', witnesses);
+            const witnesses = await client.database.call('get_witnesses_by_vote', ["", 70]);
+           // console.log('Witnesses=', witnesses);
             this.setState({
                 witnessList: witnesses,
                 fetching: false
@@ -30,7 +35,7 @@ export  default class WitnessesScreen extends Component{
     };
     render(){
         return(
-            <View>
+            <View style={{paddingBottom:60}}>
                 <Header style={{backgroundColor:'#72c9ff'}}>
                     <Left/>
                     <Body>
@@ -54,27 +59,23 @@ export  default class WitnessesScreen extends Component{
                         </Button>
                     </Right>
                 </Header>
-                <View style={{backgroundColor:'#eee', flexDirection:'row', width:'100%', height:30}}>
-                    <View style={{width:'30%', alignItems:'center', justifyContent:'center'}}><Text style={{fontSize:12, color:'blue'}} > Owner</Text></View>
-                    <View style={{width:'35%', alignItems:'center', justifyContent:'center'}}><Text style={{fontSize:12, color:'blue'}} > Sbd exchange rate</Text></View>
-                    <View style={{width:'35%', alignItems:'center', justifyContent:'center'}}><Text style={{fontSize:12, color:'blue'}} >Account creation fee</Text></View>
-                </View>
                 { this.state.witnessList &&
-                    <ScrollView>
+                    <ScrollView style={{paddingBottom:30}}>
                         <FlatList
                             data={this.state.witnessList}
-                            renderItem={({item}) => (
-                                <View  style={{borderWidth:1,paddingVertical:2 ,flexDirection:'row', width:'100%', height:35}}>
-                                    <View style={{width:'30%', alignItems:'center', justifyContent:'center'}}>
-                                        <Text style={{fontSize:12, color:'red'}}>{item.owner}</Text>
-                                    </View>
-                                    <View style={{width:'35%', alignItems:'center', justifyContent:'center'}}>
-                                        <Text style={{fontSize:12, color:'red'}}>{item.sbd_exchange_rate.base}</Text>
-                                    </View>
-                                    <View style={{width:'35%', alignItems:'center', justifyContent:'center'}}>
-                                        <Text style={{fontSize:12, color:'red'}}>{item.props.account_creation_fee}</Text>
-                                    </View>
-                                </View>
+                            renderItem={({item,index}) => (
+                                <ItemView
+                                    first={item.owner.toUpperCase()}
+                                    second={item.owner}
+                                    third={item.sbd_exchange_rate.base}
+                                    fourth={item.last_sbd_exchange_update}
+                                    fifth={item.votes}
+                                    sixth={item.running_version}
+                                    seventh={item.total_missed}
+                                    eight={item.url}
+                                    nine={index+1}
+                                    onClick={()=> this.props.navigation.navigate('Details', {"url":item.url})}
+                                />
                             )}
                             keyExtractor={item => item.owner}
 
@@ -85,3 +86,18 @@ export  default class WitnessesScreen extends Component{
         )
     }
 }
+
+export  default createStackNavigator(
+    {
+        Home: {
+            screen: WitnessesScreen,
+        },
+        Details: {
+            screen: WebScreen,
+        },
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none',
+    }
+);

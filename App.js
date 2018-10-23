@@ -29,7 +29,7 @@ export default createBottomTabNavigator(
             activeTintColor: 'blue',
             inactiveTintColor: 'white',
             style:{backgroundColor:'#72c9ff'},
-            labelStyle:{fontSize:14}
+            labelStyle:{fontSize:14},
         },
     }
 );
