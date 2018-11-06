@@ -10,29 +10,34 @@ class ItemView extends React.Component{
         let duration = now.getTime()-early.getTime();
         return(
             <View style={styles.content} {...this.props}>
-                <View style={styles.content1}>
-                    <View style={{width:40, height:40, borderRadius:20, backgroundColor:'blue', alignItems:'center', justifyContent:'center'}}>
-                        <Text style={{color:'white'}}>{this.props.first.toString().slice(0,2)}</Text>
-                    </View>
-                </View>
-                <View style={styles.content2}>
-                    <Text style={{color:'black',fontSize:12}}>{this.props.nine+". "+this.props.second.toString().toUpperCase()}</Text>
-                    <Text style={{fontSize:11}}>{this.props.third}</Text>
-                    <Text style={{fontSize:11}}>{Math.round(duration/(3600*1000))+' hour ago'}</Text>
-                </View>
-                <View style={styles.content3}>
-                    <Text style={{color:'black',fontSize:12}}>{(parseInt(this.props.fifth.toString())/1000000000000000).toFixed(1)+" PV"}</Text>
-                    <Text style={{fontSize:11}}>{"v. "+this.props.sixth}</Text>
-                    <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
-                        <FontAwesomeIcon
-                            name="warning"
-                            size={11}
-                        />
-                        <Text style={{fontSize:11}}>{this.props.seventh}</Text>
-                    </View>
-                </View>
+                <TouchableOpacity onPress={this.props.onClick}
+                                  style={{width:"80%",flexDirection:'row'}}
+                >
+
+                        <View style={styles.content1}>
+                            <View style={{width:40, height:40, borderRadius:20, backgroundColor:'blue', alignItems:'center', justifyContent:'center'}}>
+                                <Text style={{color:'white'}}>{this.props.first.toString().slice(0,2)}</Text>
+                            </View>
+                        </View>
+                        <View style={styles.content2}>
+                                <Text style={{color:'black',fontSize:12}}>{this.props.second.toString().toUpperCase()}</Text>
+                                <Text style={{fontSize:11}}>{this.props.third}</Text>
+                                <Text style={{fontSize:11}}>{Math.round(duration/(3600*1000))+' hour ago'}</Text>
+                        </View>
+                        <View style={styles.content3}>
+                            <Text style={{color:'black',fontSize:12}}>{(parseInt(this.props.fifth.toString())/1000000000000000).toFixed(1)+" PV"}</Text>
+                            <Text style={{fontSize:11}}>{"v. "+this.props.sixth}</Text>
+                            <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}>
+                                <FontAwesomeIcon
+                                    name="warning"
+                                    size={11}
+                                />
+                                <Text style={{fontSize:11}}>{this.props.seventh}</Text>
+                            </View>
+                        </View>
+                </TouchableOpacity>
                 <View style={styles.content4}>
-                    <TouchableOpacity onPress={this.props.onClick}>
+                    <TouchableOpacity onPress={this.props.onSubscribe}>
                         <View style={{width:40, height:40, borderRadius:20 , backgroundColor:'red',alignItems:'center', justifyContent:'center'}}>
                             <Icon
                                 name="bell"
@@ -49,9 +54,9 @@ class ItemView extends React.Component{
 
 const  styles=StyleSheet.create({
    content:{flexDirection:'row', borderBottomWidth:1, width:'100%'},
-    content1:{width:'20%',alignItems:'center', justifyContent:'center'},
-    content2:{width:'38%',alignItems:'center', justifyContent:'center'},
-    content3:{width:'22%',alignItems:'center', justifyContent:'center'},
+    content1:{width:'25%',alignItems:'center', justifyContent:'center'},
+    content2:{width:'45%',alignItems:'center', justifyContent:'center'},
+    content3:{width:'30%',alignItems:'center', justifyContent:'center'},
     content4:{width:'20%',alignItems:'center', justifyContent:'center'}
 
 });

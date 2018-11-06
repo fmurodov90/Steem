@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {View, Text, ScrollView, ActivityIndicator, FlatList, StyleSheet} from 'react-native';
-import {Header, Title, Button, Right, Left, Body, Form, Picker} from 'native-base';
+import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {Header, Title, Button, Right, Left, Body} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/Ionicons'
 import  * as dsteem  from 'dsteem';
-import MyText from '../components/MyText';
 import MySepView from '../components/SeparotorView'
 
 const url="https://gtg.steem.house:8090";
@@ -17,7 +16,10 @@ export default class StatusScreen extends Component {
     };
 
     componentWillMount() {
-        setInterval( ()=> this.fetchData(),3000);
+        setInterval(()=> this.fetchData(),5000);
+    }
+    componentWillUnmount(){
+        clearInterval();
     }
     fetchData = async () => {
         try {
@@ -27,6 +29,7 @@ export default class StatusScreen extends Component {
             const data1 = await client.database.getDynamicGlobalProperties();
             const data = await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${this.state.baseCurrency}&tsyms=USD,BTC,EUR`);
             const json = await data.json();
+            console.log("data:" , json);
             let result = [];
             for (let key in json) {
                 if (json.hasOwnProperty(key)) {
@@ -40,10 +43,11 @@ export default class StatusScreen extends Component {
                 ratesCurrency: result,
                 loading:false,
                 source:data1
-            })
+            });
+            console.log("data1:",source)
         } catch (e) {
-           // console.log('Error occured while fetching data', e),
-                alert(`Sorry couldn't connect to server, please check your internet connection `)
+            console.log('Error occured while fetching data', e)
+                //alert(`Sorry couldn't connect to server, please check your internet connection `)
         }
     };
 
@@ -62,7 +66,7 @@ export default class StatusScreen extends Component {
                             animating={this.state.loading}
                         />
                         <Button transparent
-                                onPress={this.fetchData}
+                                onPress={()=> this.fetchData}
                         >
                             <FontAwesome
                                 size={22}
