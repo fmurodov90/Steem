@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "193745023103",
+    "firebase_url": "https://steem-monitor.firebaseio.com",
+    "project_id": "steem-monitor",
+    "storage_bucket": "steem-monitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193745023103:android:78bf9580574bf136",
+        "android_client_info": {
+          "package_name": "com.www"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193745023103-qdu0nncidjdpcj503ug7et81i4kihaab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiRtvvL6SohuqZDs8MnVTtyzHhxx8PYCM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
