@@ -12,8 +12,44 @@ import DeviceInfo from 'react-native-device-info';
 
 const deviceId = DeviceInfo.getUniqueID();
 const serverApiKey="AAAALRwacH8:APA91bHXOYGY1U8p7ldD_yUX1HI9cIA0mvd3FMOfDRIZ_QybfaX85b9AI4cHQOP8gMBLzONCbkgXmRfRizlNn4soJDbsbDftJ5cG0Bs5TDD088a_Uj4_Rh_Wk3P4NVsGY8g1uGIdSU77";
-s
+const saveSubscription = async (deviceid,witness)=> {
+   return await fetch("http://api.esteem.ws:8080/api/wdevices", {
+        method: 'POST',
+        body: JSON.stringify({
+            deviceid: deviceid,
+            witness: witness,
+        }),
+    }).then((response)=>response.json())
+       .catch((error)=>console.error("error on subscription",error));
+   //return $http.post("http://api.esteem.ws:8080/api/wdevices",{deviceid:deviceid,witness:witness})
+};
+const updateSubscription=(deviceid,witness,del)=>{
+    if(!del){
+        return $http.put("http://api.esteem.ws:8080/api/wdevices",{deviceid:deviceid,witness:witness})
+    }else {
+        return $http.put("http://api.esteem.ws:8080/api/wdevices",{deviceid:deviceid,witness:witness,delete:true})
+    }
+};
+const updateParticipation=(deviceid,status)=>{
+    return $http.post("http://api.esteem.ws:8080/api/wdevicesp",{deviceid:deviceid,participation:status})
+};
+const getParticipation=(deviceid)=>{
+    return $http.get("http://api.esteem.ws:8080/api/wdevicesp/"+deviceid)
+};
+const deleteSubscription=(deviceid,witness)=>{
+    return $http.delete("http://api.esteem.ws:8080/api/wdevices/"+deviceid+"/"+witness)
+};
 
+const getSubscription = async (deviceid)=>{
+    let response = await fetch("http://api.esteem.ws:8080/api/wdevices/"+deviceid)
+    let responseJson = await response.json();
+    console.log(responseJson);
+        // .catch((error) => {
+        //     console.error(error);
+        // });
+
+    //return $http.get("http://api.esteem.ws:8080/api/wdevices/"+deviceid)
+};
 class WitnessesScreen extends Component{
     state={
         fetching:false,
@@ -22,11 +58,10 @@ class WitnessesScreen extends Component{
     componentWillMount(){
         this.fetchWitnessList()
     }
-    onSubscribe =(owner,id)=>{
-        saveSubscription(id,owner){
-            return $http.post("http://api.esteem.ws:8080/api/wdevices",{deviceid:id,witness:owner})
-        }
-        localNotification(owner,id);
+    onSubscribe =(witness,deviceid)=>{
+        localNotification(witness,deviceid);
+        saveSubscription(deviceid,witness);
+       // console.log(getSubscription(deviceid));
     };
 
     fetchWitnessList = async () => {
@@ -61,7 +96,8 @@ class WitnessesScreen extends Component{
                         />
                         <Button
                             transparent
-                            onPress={this.fetchWitnessList}
+                            // onPress={this.fetchWitnessList}
+                            onPress={()=>getSubscription(deviceId)}
                         >
                             <FontAwesome
                                 size={22}
