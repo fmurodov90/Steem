@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
+import {View, Text, ActivityIndicator, StyleSheet,AsyncStorage} from 'react-native';
 import {Header, Title, Button, Right, Left, Body} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/Ionicons'
 import  * as dsteem  from 'dsteem';
 import MySepView from '../components/SeparotorView'
+import {notificationListener, notificationOpenedListener} from '../components/Firebase/fbConfig';
 
 const url="https://gtg.steem.house:8090";
 const client = new dsteem.Client(url);
@@ -18,7 +19,9 @@ export default class StatusScreen extends Component {
     componentWillMount() {
         setInterval(()=> this.fetchData(),5000);
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
+        notificationListener();
+        notificationOpenedListener();
         clearInterval();
     }
     fetchData = async () => {
@@ -50,7 +53,6 @@ export default class StatusScreen extends Component {
                 //alert(`Sorry couldn't connect to server, please check your internet connection `)
         }
     };
-
     render() {
         return (
             <View>

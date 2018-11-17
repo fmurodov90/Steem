@@ -10,6 +10,7 @@ import {localNotification} from './../components/Notification/PushNotification';
 import DeviceInfo from 'react-native-device-info';
 
 
+const senderid="193745023103";
 const deviceId = DeviceInfo.getUniqueID();
 const serverApiKey="AAAALRwacH8:APA91bHXOYGY1U8p7ldD_yUX1HI9cIA0mvd3FMOfDRIZ_QybfaX85b9AI4cHQOP8gMBLzONCbkgXmRfRizlNn4soJDbsbDftJ5cG0Bs5TDD088a_Uj4_Rh_Wk3P4NVsGY8g1uGIdSU77";
 const saveSubscription = async (deviceid,witness)=> {
@@ -58,6 +59,7 @@ class WitnessesScreen extends Component{
     componentWillMount(){
         this.fetchWitnessList()
     }
+
     onSubscribe =(witness,deviceid)=>{
         localNotification(witness,deviceid);
         saveSubscription(deviceid,witness);

@@ -3,7 +3,7 @@ import PushNotification from 'react-native-push-notification';
 export const configure =()=> {
         PushNotification.configure({
             onRegister: function (token) {
-                console.log("token:", token);
+                console.log("token111:", token);
             },
             onNotification: function (notification) {
                 console.log("Notification",notification);
