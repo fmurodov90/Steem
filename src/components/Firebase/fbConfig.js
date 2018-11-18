@@ -42,8 +42,8 @@ getToken = async ()=> {
 };
 
 export const createNotificationListeners = async ()=>{
-    notificationListener();
-    notificationOpenedListener();
+    // notificationListener();
+    // notificationOpenedListener();
     const notificationOpen = await firebase.notifications().getInitialNotification();
     if (notificationOpen) {
         const { title, body } = notificationOpen.notification;

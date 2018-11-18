@@ -5,20 +5,23 @@ import FontAwesome from 'react-native-vector-icons/Ionicons'
 import  * as dsteem  from 'dsteem';
 import MySepView from '../components/SeparotorView'
 import {notificationListener, notificationOpenedListener} from '../components/Firebase/fbConfig';
+import MyView from '../components/MyView';
 
-const url="https://gtg.steem.house:8090";
+const url="https://api.steemit.com";
 const client = new dsteem.Client(url);
 export default class StatusScreen extends Component {
     state = {
-        baseCurrency: "STEEM",
-        ratesCurrency: [],
+        CurrencyInfo: null,
         source:[],
-        loading: false
+        opacity: 0
     };
 
     componentWillMount() {
-        setInterval(()=> this.fetchData(),5000);
+        setInterval(()=> this.fetchData(),3000);
     }
+    // componentDidMount(){
+    //     setInterval(()=> this.fetchData(),6000);
+    // }
     componentWillUnmount() {
         notificationListener();
         notificationOpenedListener();
@@ -27,28 +30,19 @@ export default class StatusScreen extends Component {
     fetchData = async () => {
         try {
             this.setState({
-                loading:true
+                opacity:1
             });
             const data1 = await client.database.getDynamicGlobalProperties();
-            const data = await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${this.state.baseCurrency}&tsyms=USD,BTC,EUR`);
+            const data = await fetch(`http://api.esteem.ws:8080/api/market-data/`);
             const json = await data.json();
             console.log("data:" , json);
-            let result = [];
-            for (let key in json) {
-                if (json.hasOwnProperty(key)) {
-                    result.push({
-                        key: key,
-                        value: json[key]
-                    });
-                }
-            }
             this.setState({
-                ratesCurrency: result,
-                loading:false,
+                CurrencyInfo: json,
+                opacity:0,
                 source:data1
             });
-            console.log("data1:",source)
-        } catch (e) {
+        }
+        catch (e) {
             console.log('Error occured while fetching data', e)
                 //alert(`Sorry couldn't connect to server, please check your internet connection `)
         }
@@ -61,17 +55,18 @@ export default class StatusScreen extends Component {
                     <Body>
                     <Title>Dashboard</Title>
                     </Body>
-                    <Right>
+                    <Right style={{alignItems:"center", justifyContent:'flex-end'}}>
                         <ActivityIndicator
-                            size="large"
-                            color="red"
-                            animating={this.state.loading}
+                            size = {35}
+                            color = "red"
+                            animating = {this.state.true}
+                            style={{height: 80, marginTop: 10, opacity: this.state.opacity }}
                         />
                         <Button transparent
-                                onPress={()=> this.fetchData}
+                                onPress={() => this.fetchData()}
                         >
                             <FontAwesome
-                                size={22}
+                                size={28}
                                 name="md-refresh"
                                 color="white"
                             />
@@ -102,15 +97,25 @@ export default class StatusScreen extends Component {
                         first={"SBD Supply:"}
                         second={this.state.source.current_sbd_supply}
                     />
-                    <View style={{borderWidth:1, backgroundColor:'#BBB', marginVertical:20}}></View>
+                    <View style={{borderWidth: 1, backgroundColor: '#BBB', marginVertical: 20}}>
+                    </View>
                     {
-                        this.state.ratesCurrency.map((item, index) => (
-                            <MySepView
-                                key={index}
-                                first = {"Price "+item.key+":"}
-                                second ={item.value}
+                        this.state.CurrencyInfo && (
+                            <MyView
+                                sbd_usd_price={this.state.CurrencyInfo.sbd.quotes.usd.price}
+                                sbd_usd_change={this.state.CurrencyInfo.sbd.quotes.usd.percent_change}
+                                sbd_usd_update={this.state.CurrencyInfo.sbd.quotes.usd.last_updated}
+                                sbd_btc_price={this.state.CurrencyInfo.sbd.quotes.btc.price}
+                                sbd_btc_change={this.state.CurrencyInfo.sbd.quotes.btc.percent_change}
+                                sbd_btc_update={this.state.CurrencyInfo.sbd.quotes.btc.last_updated}
+                                steem_usd_price={this.state.CurrencyInfo.steem.quotes.usd.price}
+                                steem_usd_change={this.state.CurrencyInfo.steem.quotes.usd.percent_change}
+                                steem_usd_update={this.state.CurrencyInfo.steem.quotes.usd.last_updated}
+                                steem_btc_price={this.state.CurrencyInfo.steem.quotes.btc.price}
+                                steem_btc_change={this.state.CurrencyInfo.steem.quotes.btc.percent_change}
+                                steem_btc_update={this.state.CurrencyInfo.steem.quotes.btc.last_updated}
                             />
-                        ))
+                        )
                     }
                 </View>
             </View>
