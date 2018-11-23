@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, ActivityIndicator, StyleSheet,AsyncStorage} from 'react-native';
+import {View, Text, ActivityIndicator, StyleSheet} from 'react-native';
 import {Header, Title, Button, Right, Left, Body} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/Ionicons'
 import  * as dsteem  from 'dsteem';
@@ -9,6 +9,7 @@ import MyView from '../components/MyView';
 
 const url="https://api.steemit.com";
 const client = new dsteem.Client(url);
+const fetchdata=null;
 export default class StatusScreen extends Component {
     state = {
         CurrencyInfo: null,
@@ -17,15 +18,16 @@ export default class StatusScreen extends Component {
     };
 
     componentWillMount() {
-        setInterval(()=> this.fetchData(),3000);
+        this.fetchData();
+         fetchdata = setInterval(()=> this.fetchData(),3000);
     }
     // componentDidMount(){
     //     setInterval(()=> this.fetchData(),6000);
     // }
     componentWillUnmount() {
-        notificationListener();
-        notificationOpenedListener();
-        clearInterval();
+        //notificationListener();
+       // notificationOpenedListener();
+        clearInterval(fetchdata);
     }
     fetchData = async () => {
         try {

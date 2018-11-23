@@ -5,7 +5,7 @@ import {configure} from './src/components/Notification/PushNotification';
 import {checkPermission,createNotificationListeners} from './src/components/Firebase/fbConfig';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-configure();
+//configure();
 checkPermission();
 createNotificationListeners();
 
