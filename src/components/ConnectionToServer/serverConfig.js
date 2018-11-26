@@ -68,9 +68,10 @@ const updateParticipation = async (deviceId,status)=>{
     //return $http.post("http://api.esteem.ws:8080/api/wdevicesp",{deviceid:deviceId,participation:status})
 };
 const getParticipation = async (deviceId)=>{
+    console.log("Participation ",deviceId);
     let response = await fetch("http://api.esteem.ws:8080/api/wdevicesp/"+deviceId);
-    let responseJson = await response.json();
-    console.log(responseJson);
+    // let responseJson = await response.json();
+    console.log("Participation Response ",response);
    // return $http.get("http://api.esteem.ws:8080/api/wdevicesp/"+deviceId)
 };
 const deleteSubscription = async (deviceId,witness)=>{

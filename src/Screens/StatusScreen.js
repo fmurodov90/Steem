@@ -37,7 +37,7 @@ export default class StatusScreen extends Component {
             const data1 = await client.database.getDynamicGlobalProperties();
             const data = await fetch(`http://api.esteem.ws:8080/api/market-data/`);
             const json = await data.json();
-            console.log("data:" , json);
+            console.log("data:" , data1);
             this.setState({
                 CurrencyInfo: json,
                 opacity:0,

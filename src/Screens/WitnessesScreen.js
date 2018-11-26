@@ -1,5 +1,5 @@
 import React , {Component} from 'react';
-import {View,ActivityIndicator,ScrollView,FlatList,Text,AsyncStorage} from 'react-native';
+import {View,ActivityIndicator,ScrollView,FlatList,Text,AsyncStorage,ToastAndroid} from 'react-native';
 import {Header, Title,Button,Right,Left ,Body} from 'native-base';
 import FontAwesome  from 'react-native-vector-icons/FontAwesome';
 import  * as dsteem  from 'dsteem';
@@ -31,11 +31,25 @@ class WitnessesScreen extends Component{
         console.log("OnSubscribe pushhed");
         await saveSubscription(deviceId,item.owner);
         this.fetchWitnessList();
+        ToastAndroid.showWithGravityAndOffset(
+            "You subscribed to "+item.owner+" witness",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            20,
+            80,
+        );
     };
     onDelete = async (deviceId,witness)=>{
         console.log("OnDelete pushhed");
         await deleteSubscription(deviceId,witness);
         this.fetchWitnessList();
+        ToastAndroid.showWithGravityAndOffset(
+            "You unsubscribed from  "+witness+" witness",
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            20,
+            80,
+        );
     };
 
     fetchWitnessList = async () => {
@@ -48,7 +62,7 @@ class WitnessesScreen extends Component{
                 subscribedWitnesses = await getSubscription(fcmToken);
                 console.log("Subscribed witnessessss:",subscribedWitnesses);
             }
-
+            getParticipation(fcmToken);
             const client = new dsteem.Client('https://api.steemit.com');
             const witnesses = await client.database.call('get_witnesses_by_vote', ["", 70]);
             this.setState({
